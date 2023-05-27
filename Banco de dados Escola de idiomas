@@ -1,0 +1,266 @@
+CREATE DATABASE bdEscola
+
+DROP DATABASE bdEscola
+
+USE bdEscola
+
+CREATE TABLE tbCurso(
+	codCurso INT PRIMARY KEY IDENTITY(1,1)
+	,nomeCurso VARCHAR (70) 
+	,cargaHorariaCurso CHAR (4) 
+	,valorCurso SMALLMONEY
+)
+
+CREATE TABLE tbAluno(
+	codAluno INT PRIMARY KEY IDENTITY(1,1)
+	,nomeAluno VARCHAR (80)
+	,dataNascAluno DATETIME
+	,rgAluno CHAR (14)
+	,naturalidadeAluno VARCHAR(20)
+)
+
+CREATE TABLE tbTurma(
+	codTurma INT PRIMARY KEY IDENTITY (1,1)
+	,nomeTurma VARCHAR (30)
+	,codCurso INT FOREIGN KEY (codCurso) REFERENCES tbCurso (codCurso)
+	,horarioTurma CHAR (6)
+) 
+
+CREATE TABLE tbMatricula(
+	codMatricula INT PRIMARY KEY IDENTITY (1,1)
+	,dataMatricula DATETIME
+	,codAluno INT FOREIGN KEY (codAluno) REFERENCES tbAluno (codAluno)
+	,codTurma INT FOREIGN KEY (codTurma) REFERENCES tbTurma (codTurma)
+)
+
+
+
+
+USE bdEscola
+
+SET IDENTITY_INSERT tbAluno ON
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(1, 'Paulo santos', '2000-03-10', '82.282.122-0', 'SP')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(2, 'Maria da Gloria', '1999-10-03', '42.233.123-0', 'SP')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(3, 'Pedro Nogueira da Siva', '1998-04-04', '23.533.211-9', 'SP')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(4, 'Gilson Barros Silva', '1995-09-09', '34.221.111-x', 'PE')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(5, 'Mariana Barbosa Santos', '2001-10-10', '54.222.122-9', 'RJ')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(6, 'Alessandro Pereira', '2003-10-11', '24.402.454-9', 'ES')
+
+INSERT INTO tbAluno
+(codAluno, nomeAluno, dataNascAluno, rgAluno, naturalidadeAluno)
+VALUES
+(7, 'Aline Melo', '2001-10-08', '88.365.012-3', 'RJ')
+
+SET IDENTITY_INSERT tbAluno OFF
+
+
+
+SET IDENTITY_INSERT tbCurso ON
+
+INSERT INTO tbCurso
+(codCurso, nomeCurso, cargaHorariaCurso, valorCurso)
+VALUES
+(1, 'Ingl�s', '2000', '356,00')
+
+INSERT INTO tbCurso
+(codCurso, nomeCurso, cargaHorariaCurso, valorCurso)
+VALUES
+(2, 'Alem�o', '3000', '478,00')
+
+INSERT INTO tbCurso
+(codCurso, nomeCurso, cargaHorariaCurso, valorCurso)
+VALUES
+(3, 'Espanhol', '4000', '500,00')
+
+SET IDENTITY_INSERT tbCurso OFF
+
+
+
+SET IDENTITY_INSERT tbTurma ON
+
+INSERT INTO tbTurma
+(codTurma, nomeTurma, codCurso, horarioTurma)
+VALUES
+(1, '1|A', '1', '12:00')
+
+INSERT INTO tbTurma
+(codTurma, nomeTurma, codCurso, horarioTurma)
+VALUES
+(2, '1|C', '3', '18:00')
+
+INSERT INTO tbTurma
+(codTurma, nomeTurma, codCurso, horarioTurma)
+VALUES
+(3, '1|B', '1', '18:00')
+
+INSERT INTO tbTurma
+(codTurma, nomeTurma, codCurso, horarioTurma)
+VALUES
+(4, '1AA', '2', '19:00')
+
+SET IDENTITY_INSERT tbTurma OFF
+
+
+
+SET IDENTITY_INSERT tbMatricula ON
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(1, '2015-10-03', '1', '1')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(2, '2014-05-04', '2', '1')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(3, '2014-05-04', '2', '4')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(4, '2012-05-03', '3', '2')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(5, '2016-03-03', '1', '3')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(6, '2015-05-07', '4', '2')
+
+INSERT INTO tbMatricula
+(codMatricula, dataMatricula, codAluno, codTurma)
+VALUES
+(7, '2015-07-05', '4', '3')
+
+
+SET IDENTITY_INSERT tbMatricula OFF
+
+
+
+
+
+USE bdEscola
+
+--Apresentar os nomes dos alunos ao lado do nome dos cursos que eles fazem
+
+SELECT nomeAluno AS 'Aluno', nomeCurso AS 'Curso' FROM tbAluno
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+INNER JOIN tbTurma ON
+tbMatricula.codTurma = tbTurma.codTurma
+
+INNER JOIN tbCurso ON
+tbTurma.codCurso = tbCurso.codCurso
+
+-- Apresentar a quantidade de alunos matriculados por nome do curso
+
+SELECT COUNT(tbAluno.codAluno) AS 'Quantidade de Alunos', nomeCurso AS 'Curso' FROM tbAluno 
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+INNER JOIN tbTurma ON
+tbMatricula.codTurma = tbTurma.codTurma
+
+INNER JOIN tbCurso ON
+tbTurma.codCurso = tbCurso.codCurso
+
+GROUP BY nomeCurso
+
+--Apresentar a quantidade de alunos matriculados por nome da turma
+
+SELECT COUNT(tbAluno.codAluno) AS 'Quantidade de Alunos', nomeTurma AS 'Turma' FROM tbAluno 
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+INNER JOIN tbTurma ON
+tbMatricula.codTurma = tbTurma.codTurma
+
+GROUP BY nomeTurma
+
+--Apresentar a quantidade de alunos que fizeram matricula em maio de 2016
+
+SELECT COUNT(tbAluno.codAluno) AS 'Quantidade de Alunos', dataMatricula FROM tbAluno 
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+WHERE dataMatricula BETWEEN '01-05-2016' AND '31-05-2016'
+GROUP BY dataMatricula 
+
+--Apresentar o nome dos alunos em ordem alfab�tica ao lado do nome das turmas em que est�o matriculados
+
+SELECT nomeAluno AS 'Aluno', nomeTurma AS 'Turma' FROM tbAluno 
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+INNER JOIN tbTurma ON
+tbMatricula.codTurma = tbTurma.codTurma
+
+ORDER BY nomeAluno ASC
+
+--Apresentar o nome dos cursos e os hor�rios em que eles s�o oferecidos
+
+SELECT nomeCurso AS 'Curso', horarioTurma AS 'Hor�rio' FROM tbCurso
+INNER JOIN tbTurma ON
+tbCurso.codCurso = tbTurma.codCurso
+
+--Apresentar a quantidade de alunos nascidos por estado
+
+SELECT COUNT(codAluno) AS 'Quantidade de Alunos', naturalidadeAluno AS 'Estado' FROM tbAluno
+GROUP BY naturalidadeAluno
+
+--Apresentar o nome dos alunos ao lado da data de matr�cula no formato dd/mm/aaaa
+
+SELECT nomeAluno AS 'Aluno',  CONVERT(VARCHAR(10),dataMatricula,103) AS 'Data da Matr�cula' FROM tbAluno 
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+--Apresentar os alunos cujo nome comece com A e que estejam matriculados no curso de ingl�s
+
+SELECT nomeAluno AS 'Aluno', nomeCurso AS 'Curso' FROM tbAluno
+INNER JOIN tbMatricula ON
+tbAluno.codAluno = tbMatricula.codAluno
+
+INNER JOIN tbTurma ON
+tbMatricula.codTurma = tbTurma.codTurma
+
+INNER JOIN tbCurso ON
+tbTurma.codCurso = tbCurso.codCurso
+
+WHERE nomeCurso LIKE 'I%' AND nomeAluno LIKE 'A%'
+
+
+--Apresentar a quantidade de matriculas feitas no ano de 2016
+
+SELECT COUNT(codMatricula) AS 'Quantidade de Matriculas' FROM tbMatricula
+WHERE YEAR (dataMatricula) = 2016 GROUP BY codMatricula
